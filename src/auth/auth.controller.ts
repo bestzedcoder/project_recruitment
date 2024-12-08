@@ -3,13 +3,13 @@ import { LocalAuthGuard } from "./guard/local-auth.guard";
 import { AuthService } from "./auth.service";
 import { Public } from "src/decorator/customize";
 
-@Controller()
+@Controller("login")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
-  @Post("login")
+  @Post()
   handleLogin(@Request() req) {
     return this.authService.login(req.user);
   }
