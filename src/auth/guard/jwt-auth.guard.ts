@@ -6,6 +6,7 @@ import {
 import { Reflector } from "@nestjs/core";
 import { AuthGuard } from "@nestjs/passport";
 import { IS_PUBLIC_KEY } from "src/decorator/customize";
+import { IUser } from "src/modules/users/users.interface";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {
@@ -26,7 +27,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
   handleRequest(err, user, info) {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
-      throw err || new UnauthorizedException({ message: "Unauthorized" });
+      throw err || new UnauthorizedException("Token không hợp lệ");
     }
     return user;
   }
