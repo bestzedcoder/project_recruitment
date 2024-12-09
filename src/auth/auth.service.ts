@@ -3,12 +3,16 @@ import { UsersService } from "src/modules/users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { IUser } from "src/modules/users/users.interface";
 import { RegisterUserDto } from "src/modules/users/dto/create-user.dto";
+import { ConfigService } from "@nestjs/config";
+import ms from "ms";
+import { Response } from "express";
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   //username and password là 2 tham số thư viện passport sẽ truyền vào
@@ -20,7 +24,7 @@ export class AuthService {
     return null;
   }
 
-  login(user: IUser) {
+  async login(user: IUser, response: Response) {
     const { _id, name, email, role } = user;
     const payload = {
       sub: "token login",
@@ -30,8 +34,24 @@ export class AuthService {
       email,
       role,
     };
+    const refreshToken = this.createRefreshToken(payload);
+    // update refreshToken to user
+    await this.usersService.updateUserToken(refreshToken, _id);
+
+    // set cookie
+    response.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      maxAge: ms(this.configService.get<string>("JWT_REFRESH_EXPIRES")),
+    });
+
     return {
       access_token: this.jwtService.sign(payload),
+      user: {
+        _id,
+        name,
+        email,
+        role,
+      },
     };
   }
 
@@ -42,4 +62,13 @@ export class AuthService {
       createdAt: newUser?.createdAt,
     };
   }
+
+  createRefreshToken = (payload) => {
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>("JWT_REFRESH_TOKEN_SECRET"),
+      expiresIn:
+        ms(this.configService.get<string>("JWT_REFRESH_EXPIRES")) / 1000,
+    });
+    return refreshToken;
+  };
 }
