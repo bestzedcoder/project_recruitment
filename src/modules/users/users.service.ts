@@ -67,8 +67,8 @@ export class UsersService {
 
   async findAll(currentPage: number, limit: number, qs: string) {
     const { filter, sort, population } = aqp(qs);
-    delete filter.limit;
-    delete filter.page;
+    delete filter.pageSize;
+    delete filter.current;
     let offset = (currentPage - 1) * limit;
     let defaultLimit = limit ? limit : 10;
     const totalItems = (await this.userModel.find(filter)).length;
