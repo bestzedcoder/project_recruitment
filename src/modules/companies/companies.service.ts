@@ -55,7 +55,6 @@ export class CompaniesService {
   }
 
   update(idCompany: string, user: IUser, updateCompanyDto: UpdateCompanyDto) {
-    console.log(updateCompanyDto, user);
     return this.companyModel.updateOne(
       { _id: idCompany },
       {

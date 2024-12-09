@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { UsersService } from "src/modules/users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { IUser } from "src/modules/users/users.interface";
@@ -70,5 +70,49 @@ export class AuthService {
         ms(this.configService.get<string>("JWT_REFRESH_EXPIRES")) / 1000,
     });
     return refreshToken;
+  };
+
+  processNewToken = async (refreshToken: string, response: Response) => {
+    try {
+      this.jwtService.verify(refreshToken, {
+        secret: this.configService.get<string>("JWT_REFRESH_TOKEN_SECRET"),
+      });
+      let user = await this.usersService.findUserByRefreshToken(refreshToken);
+      if (!user)
+        throw new BadRequestException(
+          "refresh token khong hop le.Vui long dang nhap lai",
+        );
+      else {
+        const { _id, name, email, role } = user;
+        const payload = {
+          sub: "refresh token",
+          iss: "from server",
+          _id,
+          name,
+          email,
+          role,
+        };
+        const refreshToken = this.createRefreshToken(payload);
+        await this.usersService.updateUserToken(refreshToken, _id.toString());
+        response.clearCookie("refresh_token");
+        response.cookie("refresh_token", refreshToken, {
+          httpOnly: true,
+          maxAge: ms(this.configService.get<string>("JWT_REFRESH_EXPIRES")),
+        });
+        return {
+          access_token: this.jwtService.sign(payload),
+          user: {
+            _id,
+            name,
+            email,
+            role,
+          },
+        };
+      }
+    } catch (error) {
+      throw new BadRequestException(
+        " refresh token khong hop le.Vui long dang nhap lai",
+      );
+    }
   };
 }

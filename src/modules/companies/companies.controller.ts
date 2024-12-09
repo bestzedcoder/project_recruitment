@@ -44,7 +44,6 @@ export class CompaniesController {
     @Body() updateCompanyDto: UpdateCompanyDto,
     @User() user: IUser,
   ) {
-    console.log(idCompany);
     return this.companiesService.update(idCompany, user, updateCompanyDto);
   }
 
