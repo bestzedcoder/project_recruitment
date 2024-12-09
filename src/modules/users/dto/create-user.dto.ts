@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from "class-validator";
 import mongoose from "mongoose";
-export class CreateUserDto {
+export class RegisterUserDto {
   @IsNotEmpty({ message: "Name không được để trống" })
   name: string;
 
@@ -35,7 +35,7 @@ class Company {
   name: string;
 }
 
-export class RegisterUserDto {
+export class CreateUserDto {
   @IsNotEmpty({ message: "Name không được để trống" })
   name: string;
 

@@ -1,4 +1,4 @@
-import { Body, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { InjectModel } from "@nestjs/mongoose";
