@@ -31,7 +31,6 @@ export class JobsController {
     @Query("pageSize") limit: string,
     @Query() qs: string,
   ) {
-    console.log(currentPage, limit, qs);
     return this.jobsService.findAll(+currentPage, +limit, qs);
   }
 
@@ -48,7 +47,6 @@ export class JobsController {
     @Body() updateJobDto: UpdateJobDto,
     @User() user: IUser,
   ) {
-    console.log(id, updateJobDto, user);
     return this.jobsService.update(id, updateJobDto, user);
   }
 

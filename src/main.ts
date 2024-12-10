@@ -35,6 +35,6 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: ["1", "2"],
   });
-  await app.listen(configService.get("PORT"));
+  await app.listen(configService.get<string>("PORT"));
 }
 bootstrap();

@@ -77,9 +77,7 @@ export class AuthService {
       this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>("JWT_REFRESH_TOKEN_SECRET"),
       });
-      console.log(refreshToken);
       let user = await this.usersService.findUserByRefreshToken(refreshToken);
-      console.log(user);
       if (!user)
         throw new BadRequestException(
           "refresh token khong hop le.Vui long dang nhap lai",
