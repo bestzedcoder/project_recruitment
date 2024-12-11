@@ -9,6 +9,7 @@ import { softDeletePlugin } from "soft-delete-plugin-mongoose";
 import { CompaniesModule } from "./modules/companies/companies.module";
 import { JobsModule } from "./modules/jobs/jobs.module";
 import { FilesModule } from "./modules/files/files.module";
+import { ResumesModule } from "./modules/resumes/resumes.module";
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { FilesModule } from "./modules/files/files.module";
     CompaniesModule,
     JobsModule,
     FilesModule,
+    ResumesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
