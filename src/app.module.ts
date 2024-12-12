@@ -10,6 +10,9 @@ import { CompaniesModule } from "./modules/companies/companies.module";
 import { JobsModule } from "./modules/jobs/jobs.module";
 import { FilesModule } from "./modules/files/files.module";
 import { ResumesModule } from "./modules/resumes/resumes.module";
+import { RolesModule } from "./modules/roles/roles.module";
+import { Permission } from "./modules/permissions/schema/permission.schema";
+import { PermissionsModule } from "./modules/permissions/permissions.module";
 
 @Module({
   imports: [
@@ -33,6 +36,8 @@ import { ResumesModule } from "./modules/resumes/resumes.module";
     JobsModule,
     FilesModule,
     ResumesModule,
+    RolesModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
