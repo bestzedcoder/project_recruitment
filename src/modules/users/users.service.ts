@@ -25,10 +25,12 @@ export class UsersService {
     return compareSync(password, hash);
   }
 
-  async findUserByEmail(email: string) {
-    return await this.userModel.findOne({
-      email: email,
-    });
+  async findUserByUsername(username: string) {
+    return await this.userModel
+      .findOne({
+        email: username,
+      })
+      .populate({ path: "role", select: { permissions: 1, name: 1 } });
   }
 
   async register(user: RegisterUserDto) {
@@ -96,7 +98,8 @@ export class UsersService {
     if (!mongoose.Types.ObjectId.isValid(id)) return "not found user";
     const result = await this.userModel
       .findById({ _id: id })
-      .select("-password");
+      .select("-password")
+      .populate({ path: "role", select: { _id: 1, name: 1 } });
     return result;
   }
 
@@ -116,6 +119,10 @@ export class UsersService {
   async remove(id: string, user: IUser) {
     if (!mongoose.Types.ObjectId.isValid(id))
       throw new BadRequestException("not found user");
+
+    const isAdmin = await this.userModel.findById(id);
+    if (isAdmin.email === "admin@gmail.com")
+      throw new BadRequestException("Không thể xóa tài khoản admin");
     await this.userModel.updateOne(
       { _id: id },
       {

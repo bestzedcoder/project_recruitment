@@ -54,9 +54,9 @@ export class JobsService {
     };
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) return "not found job";
-    return this.jobModel.findById(id);
+    return await this.jobModel.findById(id);
   }
 
   async update(id: string, updateJobDto: UpdateJobDto, user: IUser) {

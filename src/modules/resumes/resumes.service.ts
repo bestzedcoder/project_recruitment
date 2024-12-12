@@ -45,11 +45,11 @@ export class ResumesService {
     };
   }
 
-  async findAll(currentPage: number, limit: number, qs: string) {
+  async findAll(current: number, limit: number, qs: string) {
     const { filter, sort, population, projection } = aqp(qs);
     delete filter.pageSize;
     delete filter.current;
-    let offset = (currentPage - 1) * limit;
+    let offset = (current - 1) * limit;
     let defaultLimit = limit ? limit : 10;
     const totalItems = (await this.resumeModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
@@ -63,7 +63,7 @@ export class ResumesService {
       .exec();
     return {
       meta: {
-        current: currentPage, //trang hiện tại
+        current: current, //trang hiện tại
         pageSize: limit, //số lượng bản ghi đã lấy
         pages: totalPages, //tổng số trang với điều kiện query
         total: totalItems, // tổng số phần tử (số bản ghi)
@@ -73,6 +73,8 @@ export class ResumesService {
   }
 
   async findOne(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id))
+      throw new BadRequestException("Id is invalid");
     return await this.resumeModel.findById(id);
   }
 
@@ -102,11 +104,25 @@ export class ResumesService {
   }
 
   async remove(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id))
+      throw new BadRequestException("Id is invalid");
     return await this.resumeModel.softDelete({ _id: id });
   }
 
   async findResumeByUser(user: IUser) {
-    const result = await this.resumeModel.find({ userId: user._id });
+    const result = await this.resumeModel
+      .find({ userId: user._id })
+      .sort("-createdAt")
+      .populate([
+        {
+          path: "jobId",
+          select: { name: 1 },
+        },
+        {
+          path: "companyId",
+          select: { name: 1 },
+        },
+      ]);
     return result;
   }
 }

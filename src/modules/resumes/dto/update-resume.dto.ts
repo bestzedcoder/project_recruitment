@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from "class-validator";
 import { Transform, Type } from "class-transformer";
-import { Types } from "mongoose";
+import mongoose, { mongo, Types } from "mongoose";
 
 export class UpdateResumeDto extends PartialType(CreateResumeDto) {
   @IsArray({ message: "History phải là một mảng" })
@@ -20,7 +20,7 @@ export class UpdateResumeDto extends PartialType(CreateResumeDto) {
 
 class UpdatedBy {
   @IsNotEmpty({ message: "_id không được bỏ trống" })
-  _id: Types.ObjectId;
+  _id: mongoose.Schema.Types.ObjectId;
 
   @IsNotEmpty({ message: "email không được bỏ trống" })
   @IsEmail({ message: "email không đúng định dạng" })

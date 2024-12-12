@@ -26,8 +26,8 @@ export class User {
   @Prop()
   phone: string;
 
-  @Prop({ default: "USER" })
-  role: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Role", default: "USER" })
+  role: mongoose.Schema.Types.ObjectId;
 
   @Prop()
   refreshToken: string;

@@ -17,7 +17,7 @@ export class AuthService {
 
   //username and password là 2 tham số thư viện passport sẽ truyền vào
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findUserByEmail(email);
+    const user = await this.usersService.findUserByUsername(email);
     if (user && this.usersService.isValidPassword(pass, user.password)) {
       return user;
     }

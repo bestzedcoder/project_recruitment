@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreatePermissionDto } from "./dto/create-permission.dto";
 import { UpdatePermissionDto } from "./dto/update-permission.dto";
 import { InjectModel } from "@nestjs/mongoose";
@@ -6,6 +6,7 @@ import { Permission, PermissionDocument } from "./schema/permission.schema";
 import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 import { IUser } from "../users/users.interface";
 import aqp from "api-query-params";
+import mongoose from "mongoose";
 
 @Injectable()
 export class PermissionsService {
@@ -18,11 +19,9 @@ export class PermissionsService {
       apiPath: createPermissionDto.apiPath,
       method: createPermissionDto.method,
     });
+    console.log(isCheckPermission);
     if (isCheckPermission) {
-      return {
-        message: "Permission đã tồn tại",
-        data: null,
-      };
+      throw new BadRequestException("Permission đã tồn tại");
     }
 
     const permission = await this.permissionModel.create({
@@ -64,6 +63,8 @@ export class PermissionsService {
   }
 
   async findOne(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id))
+      throw new BadRequestException("Id is invalid");
     return await this.permissionModel.findById(id);
   }
 
@@ -72,15 +73,14 @@ export class PermissionsService {
     updatePermissionDto: UpdatePermissionDto,
     user: IUser,
   ) {
+    if (!mongoose.Types.ObjectId.isValid(id))
+      throw new BadRequestException("Id is invalid");
     const isCheckPermission = await this.permissionModel.findOne({
       apiPath: updatePermissionDto.apiPath,
       method: updatePermissionDto.method,
     });
     if (isCheckPermission) {
-      return {
-        message: "Permission đã tồn tại",
-        data: null,
-      };
+      throw new BadRequestException("Permission đã tồn tại");
     }
 
     const permission = await this.permissionModel.updateOne(
@@ -97,7 +97,16 @@ export class PermissionsService {
     return permission;
   }
 
-  async remove(id: string) {
+  async remove(id: string, user: IUser) {
+    if (!mongoose.Types.ObjectId.isValid(id))
+      throw new BadRequestException("Id is invalid");
+
+    await this.permissionModel.updateOne(
+      { _id: id },
+      {
+        deletedBy: { _id: user._id, email: user.email },
+      },
+    );
     return await this.permissionModel.softDelete({ _id: id });
   }
 }

@@ -15,8 +15,8 @@ export class CompaniesService {
     private companyModel: SoftDeleteModel<CompanyDocument>,
   ) {}
 
-  create(createCompanyDto: CreateCompanyDto, user: IUser) {
-    return this.companyModel.create({
+  async create(createCompanyDto: CreateCompanyDto, user: IUser) {
+    return await this.companyModel.create({
       ...createCompanyDto,
       createdBy: {
         _id: user._id,
