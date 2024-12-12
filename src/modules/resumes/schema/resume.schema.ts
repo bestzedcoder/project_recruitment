@@ -17,10 +17,10 @@ export class Resume {
   @Prop()
   status: string; // PENDING-REVIEWING-APPROVED-REJECTED
 
-  @Prop()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Company" })
   companyId: mongoose.Schema.Types.ObjectId;
 
-  @Prop()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Job" })
   jobId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.Array })
