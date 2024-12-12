@@ -9,13 +9,13 @@ export class Role {
   name: string;
 
   @Prop()
-  apiPath: string;
+  description: string;
 
   @Prop()
-  method: string;
+  isActive: boolean;
 
-  @Prop()
-  module: string;
+  @Prop({ type: mongoose.Schema.Types.Array, ref: "Permission" })
+  permissions: mongoose.Types.ObjectId[];
 
   @Prop()
   createdAt: Date;

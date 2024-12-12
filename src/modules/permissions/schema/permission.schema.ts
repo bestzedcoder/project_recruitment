@@ -9,13 +9,13 @@ export class Permission {
   name: string;
 
   @Prop()
-  description: string;
+  apiPath: string;
 
   @Prop()
-  isActive: boolean;
+  method: string;
 
-  @Prop({ type: mongoose.Schema.Types.Array })
-  permissions: mongoose.Types.ObjectId[];
+  @Prop()
+  module: string;
 
   @Prop()
   createdAt: Date;
