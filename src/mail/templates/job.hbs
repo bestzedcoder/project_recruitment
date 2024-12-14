@@ -34,7 +34,7 @@
             <tr>
               <td colspan="2">
                 <div style="text-align: left;">
-                  <div style="font-size: 16px;">Hi Hary Pham,</div>
+                  <div style="font-size: 16px;">Hi {{receiver}},</div>
                   <div style="font-size: 16px;">One of these jobs may be your
                     next one. Find out today!
                   </div>
@@ -50,48 +50,29 @@
             <tr>
               <td colspan="2">
                 <table>
-                  <tr>
-                    <td>
-                      <div style="font-size: 16px;">
-                        <a
-                          href="https://hoidanit.com.vn/"
-                          target="_blank"
-                          style="text-decoration: none;"
-                        >Web Developer (PHP, JavaScript)</a>
-                      </div>
-                      <div style="font-size: 14px;">VINAKET CO.LTD</div>
-                      <div style="font-size: 14px;">1,000 - 2,500 USD</div>
-                      <div>
-                        <span style="font-size: 14px;">PHP</span>
-                        <span style="font-size: 14px;">JavaScript</span>
-                        <span style="font-size: 14px;">English</span>
-                      </div>
-                      <div
-                        style="margin: 15px 0; border-top: 1px dashed rgba(5, 5, 5, 0.06);"
-                      ></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div style="font-size: 16px;">
-                        <a
-                          href="https://hoidanit.com.vn/"
-                          target="_blank"
-                          style="text-decoration: none;"
-                        >Web Developer (PHP, JavaScript)</a>
-                      </div>
-                      <div style="font-size: 14px;">VINAKET CO.LTD</div>
-                      <div style="font-size: 14px;">1,000 - 2,500 USD</div>
-                      <div>
-                        <span style="font-size: 14px;">PHP</span>
-                        <span style="font-size: 14px;">JavaScript</span>
-                        <span style="font-size: 14px;">English</span>
-                      </div>
-                      <div
-                        style="margin: 15px 0; border-top: 1px dashed rgba(5, 5, 5, 0.06);"
-                      ></div>
-                    </td>
-                  </tr>
+                  {{#each jobs}}
+                    <tr>
+                      <td>
+                        <div style="font-size: 16px;">
+                          <a
+                            href="https://hoidanit.com.vn/"
+                            target="_blank"
+                            style="text-decoration: none;"
+                          >{{name}}</a>
+                        </div>
+                        <div style="font-size: 14px;">{{company}}</div>
+                        <div style="font-size: 14px;">{{salary}}</div>
+                        <div>
+                          {{#each skills}}
+                            <span style="font-size: 14px;">{{this}}</span>
+                          {{/each}}
+                        </div>
+                        <div
+                          style="margin: 15px 0; border-top: 1px dashed rgba(5, 5, 5, 0.06);"
+                        ></div>
+                      </td>
+                    </tr>
+                  {{/each}}
                 </table>
               </td>
             </tr>
