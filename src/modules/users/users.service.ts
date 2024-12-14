@@ -8,11 +8,15 @@ import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 import { IUser } from "./users.interface";
 import { CreateUserDto, RegisterUserDto } from "./dto/create-user.dto";
 import aqp from "api-query-params";
+import { Role, RoleDocument } from "../roles/schema/role.schema";
+import { USER_ROLE } from "src/databases/sample";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: SoftDeleteModel<UserDocument>,
+
+    @InjectModel(Role.name) private roleModel: SoftDeleteModel<RoleDocument>,
   ) {}
 
   getHashPassword(password: string) {
@@ -30,7 +34,7 @@ export class UsersService {
       .findOne({
         email: username,
       })
-      .populate({ path: "role", select: { permissions: 1, name: 1 } });
+      .populate({ path: "role", select: { name: 1 } });
   }
 
   async register(user: RegisterUserDto) {
@@ -40,9 +44,12 @@ export class UsersService {
       throw new BadRequestException(
         `Email : ${user.email} đã tồn tại trên hệ thống.Vui lòng nhập email khác`,
       );
+    const role = await this.roleModel.findOne({ name: USER_ROLE });
+
     return await this.userModel.create({
       ...user,
       password: hashPassword,
+      role: role?._id,
     });
   }
 
@@ -53,6 +60,7 @@ export class UsersService {
       throw new BadRequestException(
         `Email : ${user.email} đã tồn tại trên hệ thống.Vui lòng nhập email khác`,
       );
+
     const newUser = await this.userModel.create({
       ...createUser,
       password: hashPassword,
@@ -140,6 +148,9 @@ export class UsersService {
   };
 
   findUserByRefreshToken = async (refreshToken: string) => {
-    return await this.userModel.findOne({ refreshToken });
+    return (await this.userModel.findOne({ refreshToken })).populate({
+      path: "role",
+      select: { name: 1 },
+    });
   };
 }

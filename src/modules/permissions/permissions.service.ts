@@ -19,7 +19,6 @@ export class PermissionsService {
       apiPath: createPermissionDto.apiPath,
       method: createPermissionDto.method,
     });
-    console.log(isCheckPermission);
     if (isCheckPermission) {
       throw new BadRequestException("Permission đã tồn tại");
     }

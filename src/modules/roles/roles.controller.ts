@@ -14,7 +14,7 @@ import { UpdateRoleDto } from "./dto/update-role.dto";
 import { ResponseMessage, User } from "src/decorator/customize";
 import { IUser } from "../users/users.interface";
 
-@Controller("role")
+@Controller("roles")
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 

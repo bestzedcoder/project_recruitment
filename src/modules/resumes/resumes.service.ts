@@ -75,7 +75,16 @@ export class ResumesService {
   async findOne(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id))
       throw new BadRequestException("Id is invalid");
-    return await this.resumeModel.findById(id);
+    return (await this.resumeModel.findById(id)).populate([
+      {
+        path: "jobId",
+        select: { name: 1 },
+      },
+      {
+        path: "companyId",
+        select: { name: 1 },
+      },
+    ]);
   }
 
   async update(id: string, status: string, user: IUser) {

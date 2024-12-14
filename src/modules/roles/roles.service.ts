@@ -7,6 +7,7 @@ import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 import { IUser } from "../users/users.interface";
 import mongoose from "mongoose";
 import aqp from "api-query-params";
+import { ADMIN_ROLE } from "src/databases/sample";
 
 @Injectable()
 export class RolesService {
@@ -62,10 +63,12 @@ export class RolesService {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new BadRequestException("Id không hợp lệ");
     }
-    return (await this.roleModel.findById(id)).populate({
+    const result = await this.roleModel.findById(id).populate({
       path: "permissions",
-      select: { _id: 1, apiPath: 1, name: 1, method: 1, module: 1 }, // số 1 là chọn số -1 là không chọn
+      select: { _id: 1, apiPath: 1, name: 1, method: 1, module: 1 },
     });
+    console.log(result);
+    return result;
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto, user: IUser) {
@@ -86,7 +89,7 @@ export class RolesService {
     if (!mongoose.Types.ObjectId.isValid(id))
       throw new BadRequestException("Id không hợp lệ");
     const isRoleAdmin = await this.roleModel.findById(id);
-    if (isRoleAdmin.name === "ADMIN")
+    if (isRoleAdmin.name === ADMIN_ROLE)
       throw new BadRequestException("Không thể xóa role ADMIN");
 
     await this.roleModel.updateOne(
