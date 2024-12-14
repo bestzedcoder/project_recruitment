@@ -28,11 +28,11 @@ export class JobsService {
     };
   }
 
-  async findAll(currentPage: number, limit: number, qs: string) {
+  async findAll(current: number, limit: number, qs: string) {
     const { filter, sort, population } = aqp(qs);
     delete filter.pageSize;
     delete filter.current;
-    let offset = (currentPage - 1) * limit;
+    let offset = (current - 1) * limit;
     let defaultLimit = limit ? limit : 10;
     const totalItems = (await this.jobModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
@@ -45,7 +45,7 @@ export class JobsService {
       .exec();
     return {
       meta: {
-        current: currentPage, //trang hiện tại
+        current, //trang hiện tại
         pageSize: limit, //số lượng bản ghi đã lấy
         pages: totalPages, //tổng số trang với điều kiện query
         total: totalItems, // tổng số phần tử (số bản ghi)

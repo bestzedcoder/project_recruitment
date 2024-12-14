@@ -34,6 +34,7 @@ export class CompaniesController {
     return this.companiesService.findAll(+currentPage, +limit, qs);
   }
 
+  @ResponseMessage("Get company by id")
   @Get(":id")
   @Public()
   findOne(@Param("id") id: string) {
