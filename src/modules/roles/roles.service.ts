@@ -67,7 +67,6 @@ export class RolesService {
       path: "permissions",
       select: { _id: 1, apiPath: 1, name: 1, method: 1, module: 1 },
     });
-    console.log(result);
     return result;
   }
 

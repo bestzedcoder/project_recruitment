@@ -26,7 +26,11 @@ export class User {
   @Prop()
   phone: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Role", default: "USER" })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Role",
+    default: "675c708f7c1e65e6783a0123",
+  })
   role: mongoose.Schema.Types.ObjectId;
 
   @Prop()

@@ -129,7 +129,7 @@ export class UsersService {
       throw new BadRequestException("not found user");
 
     const isAdmin = await this.userModel.findById(id);
-    if (isAdmin.email === "admin@gmail.com")
+    if (isAdmin && isAdmin.email === "admin@gmail.com")
       throw new BadRequestException("Không thể xóa tài khoản admin");
     await this.userModel.updateOne(
       { _id: id },

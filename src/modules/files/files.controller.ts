@@ -6,7 +6,6 @@ import {
   ParseFilePipeBuilder,
   HttpStatus,
 } from "@nestjs/common";
-import { FilesService } from "./files.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ResponseMessage } from "src/decorator/customize";
 
